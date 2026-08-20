@@ -67,6 +67,7 @@ export default defineConfig({
             items: [
               { text: 'Vercel AI SDK', link: '/guide/adapter-vercel-ai' },
               { text: 'Mastra', link: '/guide/adapter-mastra' },
+              { text: 'OpenTelemetry', link: '/guide/otel' },
             ],
           },
         ],
@@ -121,6 +122,7 @@ export default defineConfig({
             items: [
               { text: 'Vercel AI SDK', link: '/en/guide/adapter-vercel-ai' },
               { text: 'Mastra', link: '/en/guide/adapter-mastra' },
+              { text: 'OpenTelemetry', link: '/en/guide/otel' },
             ],
           },
         ],

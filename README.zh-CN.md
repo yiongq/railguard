@@ -94,6 +94,7 @@ const output = await guard.run('onOutput', answerPayload, ctx)
 | `coverageMatrix(rules, cases)` | 规则 threats 元数据 × OWASP 2026 官方名录(LLM Top 10 + Agentic/ASI Top 10),未覆盖明列 |
 | `railguardMiddleware(guard)` + `guardTools(tools, guard)` | Vercel AI SDK v7 中间件 + 工具包裹(`@yiong/railguard/adapters/vercel-ai`,零依赖结构化类型) |
 | `railguardProcessor(guard)` | Mastra v1 Processor(`@yiong/railguard/adapters/mastra`);规则层零模型调用,与内置 LLM 检测器叠加使用 |
+| `otelAuditSink(opts)` + `traceGuard(guard, opts)` | OpenTelemetry 适配器(`@yiong/railguard/otel`):判定映射为 `gen_ai.evaluation.result` 事件贴进宿主 trace;零依赖结构化注入,reason 默认不采集 |
 
 内置数据集的诚实承诺:含表外新话术攻击用例,概率层预期漏掉——ASR 不为零是文档化的事实,不是缺陷。
 

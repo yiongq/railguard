@@ -90,6 +90,7 @@ Distilled from a production guard pipeline (fail-closed, enumeration-oracle-safe
 | `coverageMatrix(rules, cases)` | Rule `threats` metadata × the official OWASP 2026 catalogs (LLM Top 10 + Agentic/ASI Top 10); uncovered threats listed honestly |
 | `railguardMiddleware(guard)` + `guardTools(tools, guard)` | Vercel AI SDK v7 middleware + tool wrapping (`@yiong/railguard/adapters/vercel-ai`, zero-dep structural types) |
 | `railguardProcessor(guard)` | Mastra v1 Processor (`@yiong/railguard/adapters/mastra`); rules-layer, zero model calls — stack it before Mastra's LLM-based detectors |
+| `otelAuditSink(opts)` + `traceGuard(guard, opts)` | OpenTelemetry adapter (`@yiong/railguard/otel`): verdicts as `gen_ai.evaluation.result` events on the host's trace; zero-dep structural injection, reason capture off by default |
 
 Honesty note baked into the dataset: it includes an off-table novel-phrasing attack the heuristic layer is *expected* to miss — a non-zero ASR is a documented fact, not a defect.
 

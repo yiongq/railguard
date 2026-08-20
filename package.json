@@ -45,6 +45,10 @@
       "types": "./dist/adapters/mastra.d.ts",
       "default": "./dist/adapters/mastra.js"
     },
+    "./otel": {
+      "types": "./dist/otel/index.d.ts",
+      "default": "./dist/otel/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
