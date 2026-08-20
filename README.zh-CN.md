@@ -81,11 +81,12 @@ const output = await guard.run('onOutput', answerPayload, ctx)
 | `fieldMask({config})` | afterToolCall | 按角色递归抹除字段 |
 | `approvalGate({config, store})` | beforeToolCall | 分级人工审批:幂等开单、重试消票、一票一次、预写日志存储 |
 | `MemoryApprovalStore` / `JsonlApprovalStore`(`/node`) | — | 事件溯源审批存储;崩溃残行容忍回放 |
+| `SignedJsonlAuditSink`(`/node`)+ `verifyAuditChain`(`/audit`) | — | 防篡改审计:Ed25519 签名哈希链、离线校验、断电残行截断、跨重启续链 |
 
 ## 路线图
 
 - M2(部分 ✅):spotlighting、污点+lethal-trifecta、无据数字、PII、defang 冻结块、流式护栏已随 0.2.0 交付;下一步 ai-edge 迁移
-- M3(部分 ✅):RBAC 工具闸门/行过滤/字段脱敏/分级审批闸门已随 0.3.0 交付;剩 Ed25519 签名审计链
+- M3 ✅(0.4.0):数据访问半区 + Ed25519 签名审计链(WebCrypto,edge 也能签验)
 - M4:评测框架(Trace 重放、ASR + utility 双指标)、覆盖矩阵、Vercel AI SDK / Mastra 适配器
 
 ## 工程承诺

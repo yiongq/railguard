@@ -77,11 +77,12 @@ Ported from mcp-foundry's guard pipeline (fail-closed, enumeration-oracle-safe, 
 | `fieldMask({config})` | afterToolCall | Recursive field redaction per role |
 | `approvalGate({config, store})` | beforeToolCall | Graded human approval: idempotent ticketing, retry-consumes-ticket, one ticket one call, WAL-backed stores |
 | `MemoryApprovalStore` / `JsonlApprovalStore` (`/node`) | — | Event-sourced approval stores; crash-tail tolerant replay |
+| `SignedJsonlAuditSink` (`/node`) + `verifyAuditChain` (`/audit`) | — | Tamper-evident audit: Ed25519-signed hash chain, offline verification, crash-tail truncation, cross-restart continuation |
 
 ## Roadmap
 
 - M2 (partial ✅): spotlighting, taint + lethal-trifecta, numeric tracing, PII, freeze-block defang, streaming guard shipped in 0.2.0; ai-edge migration next
-- M3 (partial ✅): RBAC tool gate / row filter / field mask / graded approval gate shipped in 0.3.0; Ed25519 signed audit chain remaining
+- M3 ✅ (0.4.0): data-access half + Ed25519 signed audit chain (WebCrypto — signs and verifies on edge too)
 - M4: eval framework (trace replay, ASR + utility dual metrics), coverage matrix, Vercel AI SDK / Mastra adapters
 
 ## Engineering commitments

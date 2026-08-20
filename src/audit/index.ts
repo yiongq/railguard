@@ -12,3 +12,8 @@ export function consoleSink(logger: (line: string) => void = console.log): Audit
 }
 
 export type { AuditEvent, AuditSink } from '../core/types'
+export {
+  AuditChainSigner, GENESIS, computeChainHash, exportKeyJwk, generateAuditKeypair,
+  importPrivateKeyJwk, importPublicKeyJwk, parseSignedAuditLog, verifyAuditChain,
+  type AuditKeypair, type ChainHead, type SignedAuditEvent, type VerifyResult,
+} from './chain'
