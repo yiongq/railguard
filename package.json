@@ -1,16 +1,30 @@
 {
   "name": "@yiong/railguard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lifecycle-hook guardrail pipeline for LLM apps and agents: data-access guards and LLM I/O guards in one zero-dependency TypeScript library. In-process, Node + edge, per-rule enforce/observe/off.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
-  "engines": { "node": ">=20.19" },
-  "files": ["dist", "src"],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
-    "./rules": { "types": "./dist/rules/index.d.ts", "default": "./dist/rules/index.js" },
-    "./audit": { "types": "./dist/audit/index.d.ts", "default": "./dist/audit/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./rules": {
+      "types": "./dist/rules/index.d.ts",
+      "default": "./dist/rules/index.js"
+    },
+    "./audit": {
+      "types": "./dist/audit/index.d.ts",
+      "default": "./dist/audit/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -22,10 +36,22 @@
     "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build"
   },
   "keywords": [
-    "llm", "guardrails", "llm-guardrails", "prompt-injection", "agent-security",
-    "hallucination", "citation", "rbac", "ai-safety", "vercel-ai-sdk", "mcp"
+    "llm",
+    "guardrails",
+    "llm-guardrails",
+    "prompt-injection",
+    "agent-security",
+    "hallucination",
+    "citation",
+    "rbac",
+    "ai-safety",
+    "vercel-ai-sdk",
+    "mcp"
   ],
-  "repository": { "type": "git", "url": "git+https://github.com/yiongq/railguard.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yiongq/railguard.git"
+  },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "tsdown": "0.15.7",

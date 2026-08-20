@@ -58,13 +58,20 @@ const output = await guard.run('onOutput', answerPayload, ctx)
 | `faithfulness(opts)` | onOutput | 确定 | 引用逐字核验,核不上丢弃,全丢强制降级拒答(failMode: closed) |
 | `linkPolicy({allow})` | onOutput | 确定 | URL 白名单(allowlist 语义——blocklist 可被绕过),剥隐形 Tag 字符 |
 | `outputCaps(opts)` | onOutput | 确定 | 回答长度/引用条数封顶 |
+| `spotlight({mode})` | afterToolCall / 任意 | 概率 | 不可信内容打标(标记符自 requestId 派生,每请求不同);delimit / datamark |
+| `lethalTrifecta(opts)` | beforeToolCall | 确定 | 私有数据+不可信内容+对外通信三要素齐备即升级人工;evidence 为原始调用 |
+| `numericTrace({provider})` | onOutput | 确定 | 数据型数字必须溯源到分信任级的事实白名单;容差按书写精度推导 |
+| `pii({kinds, strategy})` | onOutput | 确定 | 大陆手机号/身份证/邮箱/银行卡;mask / redact / block |
+| `admitPromptBoundText` | 辅助函数 | 确定 | prompt 域文本(记忆/计划)写入准入:净化后仍命中注入即拒存 |
 
 概率层(注入启发式)单独 enforce **不构成安全边界**——真正的边界是输出侧核验与确定性规则。
 这是本包的文档承诺,不是免责声明。
 
+流式:`createStreamGuard(guard, ctx)` 按句边界攒批,增量跑同一套 onOutput 规则——中途拦截即切流。
+
 ## 路线图
 
-- M2:spotlighting、污点跟踪 + lethal-trifecta 规则、无据数字溯源(FactProvider)、流式输出护栏、PII
+- M2(部分 ✅):spotlighting、污点+lethal-trifecta、无据数字、PII、defang 冻结块、流式护栏已随 0.2.0 交付;下一步 ai-edge 迁移
 - M3:数据访问半区(AuthzProvider / 行过滤双模式 / ApprovalProvider)、Ed25519 签名审计链
 - M4:评测框架(Trace 重放、ASR + utility 双指标)、覆盖矩阵、Vercel AI SDK / Mastra 适配器
 

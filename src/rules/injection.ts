@@ -1,4 +1,5 @@
 import type { Rule, RuleOutcome } from '../core/types'
+import { breakForgedMarks, freezeWrap } from './freeze'
 import { INJECTION_TABLE, INJECTION_TABLE_VERSION, type InjectionPattern } from './injection.table'
 
 export interface InjectionOptions {
@@ -24,11 +25,12 @@ function scan(text: string, patterns: readonly InjectionPattern[]): Hit[] {
   return hits
 }
 
-function defangText(text: string, patterns: readonly InjectionPattern[]): string {
-  let out = text
+function defangText(requestId: string, text: string, patterns: readonly InjectionPattern[]): string {
+  // 先破坏预埋的假冻结标记,再打真标记(token 含 per-request id,无法预先伪造)
+  let out = breakForgedMarks(text)
   for (const p of patterns) {
     const flags = p.flags.includes('g') ? p.flags : p.flags + 'g'
-    out = out.replace(new RegExp(p.source, flags), (m) => `⟦已失效的疑似注入: ${m}⟧`)
+    out = out.replace(new RegExp(p.source, flags), (m) => freezeWrap(requestId, m, '疑似注入已失效'))
   }
   return out
 }
@@ -49,7 +51,7 @@ export function injection(options: InjectionOptions): Rule<string> {
     cost: 'zero',
     version: INJECTION_TABLE_VERSION,
     threats: { llm: ['LLM01:2026'], asi: ['ASI01:2026'] },
-    check(input: string): RuleOutcome<string> {
+    check(input: string, ctx): RuleOutcome<string> {
       const hits = scan(input, patterns)
       if (hits.length === 0) return { verdict: 'pass', status: 'ok' }
       const reason = `命中注入模式: ${hits.map((h) => h.id).join(', ')}`
@@ -58,7 +60,7 @@ export function injection(options: InjectionOptions): Rule<string> {
         return { verdict: 'blocked', status: 'ok', reason, score, evidence: hits }
       }
       if (options.mode === 'defang') {
-        return { verdict: 'modified', status: 'ok', transformed: defangText(input, patterns), reason, score, evidence: hits }
+        return { verdict: 'modified', status: 'ok', transformed: defangText(ctx.requestId, input, patterns), reason, score, evidence: hits }
       }
       return { verdict: 'pass', status: 'ok', reason, score, evidence: hits }
     },

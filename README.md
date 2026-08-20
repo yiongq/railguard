@@ -55,12 +55,19 @@ const output = await guard.run('onOutput', answerPayload, ctx)
 | `faithfulness(opts)` | onOutput | deterministic | Verbatim citation verification; unverifiable citations are dropped; if none survive, the answer is force-downgraded to a refusal (`failMode: closed`) |
 | `linkPolicy({allow})` | onOutput | deterministic | URL allowlist (allowlist semantics — blocklists are bypassable); strips invisible tag characters |
 | `outputCaps(opts)` | onOutput | deterministic | Caps answer length and citation count |
+| `spotlight({mode})` | afterToolCall / any | probabilistic | Spotlighting for untrusted content (per-request marker derived from requestId); delimit / datamark |
+| `lethalTrifecta(opts)` | beforeToolCall | deterministic | Escalates to human when private-data + untrusted-content + external-comms all present; evidence = raw call |
+| `numericTrace({provider})` | onOutput | deterministic | Every data-like number must trace to a trust-leveled fact (authoritative/derived/userStated); tolerance derived from written precision |
+| `pii({kinds, strategy})` | onOutput | deterministic | CN phone / ID / email / bank card; mask / redact / block |
+| `admitPromptBoundText` | helper | deterministic | Admission gate for text entering the prompt domain (memory/plans): sanitize then reject on injection hit |
 
 The probabilistic tier (injection heuristics) **does not constitute a security boundary on its own** — the real boundary is output-side verification and the deterministic rules. This is a documented commitment, not a disclaimer.
 
+Streaming: `createStreamGuard(guard, ctx)` batches chunks at sentence boundaries and runs the same onOutput rules incrementally — mid-stream block cuts the stream.
+
 ## Roadmap
 
-- M2: spotlighting, taint tracking + lethal-trifecta rule, ungrounded-number tracing (FactProvider), streaming output guards, PII
+- M2 (partial ✅): spotlighting, taint + lethal-trifecta, numeric tracing, PII, freeze-block defang, streaming guard shipped in 0.2.0; ai-edge migration next
 - M3: data-access half (AuthzProvider / dual-mode row filtering / ApprovalProvider), Ed25519 signed audit chain
 - M4: eval framework (trace replay, ASR + utility dual metrics), coverage matrix, Vercel AI SDK / Mastra adapters
 
