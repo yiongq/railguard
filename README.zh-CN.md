@@ -69,10 +69,23 @@ const output = await guard.run('onOutput', answerPayload, ctx)
 
 流式:`createStreamGuard(guard, ctx)` 按句边界攒批,增量跑同一套 onOutput 规则——中途拦截即切流。
 
+## 数据访问守卫(`/data`)
+
+自 mcp-foundry 守卫管线迁入(fail-closed、防存在性枚举预言机、防重放):
+
+| API | 钩子 | 说明 |
+|---|---|---|
+| `rbacToolGate({config})` | beforeToolCall | 角色→工具白名单;未知角色/无身份一律拦(fail-closed) |
+| `allowedTools(config, principal, names)` | 辅助 | 工具列表在展示前就收窄 |
+| `rowFilter({config})` | afterToolCall | `$self` 引用的行级过滤;「不存在」与「越权」返回一致的拒绝 |
+| `fieldMask({config})` | afterToolCall | 按角色递归抹除字段 |
+| `approvalGate({config, store})` | beforeToolCall | 分级人工审批:幂等开单、重试消票、一票一次、预写日志存储 |
+| `MemoryApprovalStore` / `JsonlApprovalStore`(`/node`) | — | 事件溯源审批存储;崩溃残行容忍回放 |
+
 ## 路线图
 
 - M2(部分 ✅):spotlighting、污点+lethal-trifecta、无据数字、PII、defang 冻结块、流式护栏已随 0.2.0 交付;下一步 ai-edge 迁移
-- M3:数据访问半区(AuthzProvider / 行过滤双模式 / ApprovalProvider)、Ed25519 签名审计链
+- M3(部分 ✅):RBAC 工具闸门/行过滤/字段脱敏/分级审批闸门已随 0.3.0 交付;剩 Ed25519 签名审计链
 - M4:评测框架(Trace 重放、ASR + utility 双指标)、覆盖矩阵、Vercel AI SDK / Mastra 适配器
 
 ## 工程承诺

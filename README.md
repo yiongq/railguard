@@ -65,10 +65,23 @@ The probabilistic tier (injection heuristics) **does not constitute a security b
 
 Streaming: `createStreamGuard(guard, ctx)` batches chunks at sentence boundaries and runs the same onOutput rules incrementally — mid-stream block cuts the stream.
 
+## Data-access guards (`/data`)
+
+Ported from mcp-foundry's guard pipeline (fail-closed, enumeration-oracle-safe, replay-proof):
+
+| API | Hook | What it does |
+|---|---|---|
+| `rbacToolGate({config})` | beforeToolCall | Role → tool allowlist; unknown role / missing principal blocked (fail-closed) |
+| `allowedTools(config, principal, names)` | helper | Narrow the tool list before it is ever shown |
+| `rowFilter({config})` | afterToolCall | Row-level filtering via `$self` refs; "not found" and "not yours" return identical denials |
+| `fieldMask({config})` | afterToolCall | Recursive field redaction per role |
+| `approvalGate({config, store})` | beforeToolCall | Graded human approval: idempotent ticketing, retry-consumes-ticket, one ticket one call, WAL-backed stores |
+| `MemoryApprovalStore` / `JsonlApprovalStore` (`/node`) | — | Event-sourced approval stores; crash-tail tolerant replay |
+
 ## Roadmap
 
 - M2 (partial ✅): spotlighting, taint + lethal-trifecta, numeric tracing, PII, freeze-block defang, streaming guard shipped in 0.2.0; ai-edge migration next
-- M3: data-access half (AuthzProvider / dual-mode row filtering / ApprovalProvider), Ed25519 signed audit chain
+- M3 (partial ✅): RBAC tool gate / row filter / field mask / graded approval gate shipped in 0.3.0; Ed25519 signed audit chain remaining
 - M4: eval framework (trace replay, ASR + utility dual metrics), coverage matrix, Vercel AI SDK / Mastra adapters
 
 ## Engineering commitments
