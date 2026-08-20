@@ -4,7 +4,7 @@ title: railguard
 ---
 
 <div class="rg-hero">
-  <div class="rg-eyebrow">zero-dep guardrail pipeline · v0.5.0 · node + edge</div>
+  <div class="rg-eyebrow">zero-dep guardrail pipeline · node + edge</div>
   <h1 class="rg-title">rail<span class="rg-title-guard">guard</span></h1>
   <p class="rg-tagline">
     LLM 应用与 Agent 的护栏流水线。<strong>当模型被骗时——它一定会被骗——重要的东西不能坏。</strong><br>

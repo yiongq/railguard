@@ -19,6 +19,12 @@ onInput → onPromptBuild → beforeToolCall → afterToolCall → onModelRespon
 规则按钩子挂载,**数组顺序即执行顺序**——流水线不做任何自动重排,顺序是承重的
 (「先建审批单再核链接」这类依赖真实存在)。
 
+六个钩子里,`onPromptBuild` 与 `onModelResponse` 目前没有专属的内置规则——
+它们是给宿主的扩展位:任何字符串规则都能用 `hook` 选项挂过去
+(如 `injection({ mode: 'flag', hook: 'onModelResponse' })`、
+`maxLength(n, 'onPromptBuild')`),记忆/计划写入 prompt 前的准入则用
+[`admitPromptBoundText`](./rules#admitpromptboundtext)。
+
 ```ts
 import { createGuard, lens } from '@yiong/railguard'
 import { faithfulness, injection, inputHygiene, linkPolicy, maxLength } from '@yiong/railguard/rules'

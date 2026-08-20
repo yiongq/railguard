@@ -86,7 +86,7 @@ numericTrace({
 ## pii
 
 Mainland-China phone numbers / national ID numbers / emails / bank cards, with three policies: `mask` (keep head and tail, mask the rest) / `redact` / `block`.
-Deterministic regex layer; higher-recall NER detection goes through an optional adapter and stays out of the zero-dependency core.
+Deterministic regex layer; higher-recall NER detection is planned as an optional adapter (roadmap item, not shipped yet) and stays out of the zero-dependency core.
 
 ## spotlight
 

@@ -4,7 +4,7 @@ title: railguard
 ---
 
 <div class="rg-hero">
-  <div class="rg-eyebrow">zero-dep guardrail pipeline · v0.5.0 · node + edge</div>
+  <div class="rg-eyebrow">zero-dep guardrail pipeline · node + edge</div>
   <h1 class="rg-title">rail<span class="rg-title-guard">guard</span></h1>
   <p class="rg-tagline">
     A guardrail pipeline for LLM apps and agents. <strong>When the model is fooled — and it will be — nothing important breaks.</strong><br>

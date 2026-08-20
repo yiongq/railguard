@@ -19,6 +19,12 @@ onInput → onPromptBuild → beforeToolCall → afterToolCall → onModelRespon
 Rules mount per hook, and **array order is execution order** — the pipeline never auto-reorders anything; order is load-bearing
 (dependencies like "create the approval ticket before verifying links" are real).
 
+Of the six hooks, `onPromptBuild` and `onModelResponse` currently ship no dedicated
+built-in rules — they are extension points for the host: any string rule mounts there
+via its `hook` option (e.g. `injection({ mode: 'flag', hook: 'onModelResponse' })`,
+`maxLength(n, 'onPromptBuild')`), and admission of memory/plans into the prompt goes
+through [`admitPromptBoundText`](./rules#admitpromptboundtext).
+
 ```ts
 import { createGuard, lens } from '@yiong/railguard'
 import { faithfulness, injection, inputHygiene, linkPolicy, maxLength } from '@yiong/railguard/rules'

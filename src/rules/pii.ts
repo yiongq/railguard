@@ -21,7 +21,7 @@ const PATTERNS: Record<PiiKind, RegExp> = {
 const mask = (s: string): string =>
   s.length <= 6 ? s[0] + '***' : s.slice(0, 3) + '****' + s.slice(-3)
 
-/** PII 检测与脱敏(确定性正则层;更高召回的 NER 检测走可选适配器,不进零依赖核心) */
+/** PII 检测与脱敏(确定性正则层;更高召回的 NER 检测规划走可选适配器——路线图项,不进零依赖核心) */
 export function pii(options: PiiOptions = {}): Rule<string> {
   const kinds = options.kinds ?? (Object.keys(PATTERNS) as PiiKind[])
   const strategy = options.strategy ?? 'mask'
