@@ -1,20 +1,37 @@
-name: ci
+name: CI
+
 on:
-  push: { branches: [main] }
   pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  test:
+  check:
+    name: Zero-deps / Purity / Typecheck / Test / Build / Package shape
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with: { version: 10 }
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+        with:
+          node-version: 22
+          cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # 工程承诺逐条断言:dependencies 必空;core/rules/audit/eval/adapters 无 node: 导入
       - run: pnpm check:zero-deps
       - run: pnpm check:no-node-imports
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      # 产物形状门:publint + attw(esm-only profile)——unbundle 包的出口一个都不能歪
+      - run: pnpm check:package
+      # 文档站也要能建起来(死链检查在 vitepress build 里)
+      - run: pnpm docs:build
