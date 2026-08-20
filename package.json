@@ -1,6 +1,6 @@
 {
   "name": "@yiong/railguard",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Lifecycle-hook guardrail pipeline for LLM apps and agents: data-access guards and LLM I/O guards in one zero-dependency TypeScript library. In-process, Node + edge, per-rule enforce/observe/off.",
   "license": "MIT",
   "type": "module",
