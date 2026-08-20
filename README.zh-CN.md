@@ -83,11 +83,25 @@ const output = await guard.run('onOutput', answerPayload, ctx)
 | `MemoryApprovalStore` / `JsonlApprovalStore`(`/node`) | — | 事件溯源审批存储;崩溃残行容忍回放 |
 | `SignedJsonlAuditSink`(`/node`)+ `verifyAuditChain`(`/audit`) | — | 防篡改审计:Ed25519 签名哈希链、离线校验、断电残行截断、跨重启续链 |
 
+## 评测与适配器(M4,`/eval` 与 `/adapters/*`)
+
+| API | 说明 |
+|---|---|
+| `evaluate(guard, cases)` | ASR + utility 双指标报告(单看拦截率会把护栏调成拦一切);byRule/byTag 归因 |
+| `ioCases()` / `dataCases()` + `referenceIoGuard()` / `referenceDataGuard()` | 版本戳数据集与参考守卫,开箱即评;CI 钉住指标数值 |
+| `scoreCurve(guard, cases)` | 概率层阈值曲线(observe 全跑,假想拦截率 vs 假想误伤率) |
+| `recordingGuard` / `diffReplay` | 录制真实流量 → 换配置重放 → 改判清单;observe → enforce 的对账工序 |
+| `coverageMatrix(rules, cases)` | 规则 threats 元数据 × OWASP 2026 官方名录(LLM Top 10 + Agentic/ASI Top 10),未覆盖明列 |
+| `railguardMiddleware(guard)` + `guardTools(tools, guard)` | Vercel AI SDK v7 中间件 + 工具包裹(`@yiong/railguard/adapters/vercel-ai`,零依赖结构化类型) |
+| `railguardProcessor(guard)` | Mastra v1 Processor(`@yiong/railguard/adapters/mastra`);规则层零模型调用,与内置 LLM 检测器叠加使用 |
+
+内置数据集的诚实承诺:含表外新话术攻击用例,概率层预期漏掉——ASR 不为零是文档化的事实,不是缺陷。
+
 ## 路线图
 
-- M2(部分 ✅):spotlighting、污点+lethal-trifecta、无据数字、PII、defang 冻结块、流式护栏已随 0.2.0 交付;下一步 ai-edge 迁移
-- M3 ✅(0.4.0):数据访问半区 + Ed25519 签名审计链(WebCrypto,edge 也能签验)
-- M4:评测框架(Trace 重放、ASR + utility 双指标)、覆盖矩阵、Vercel AI SDK / Mastra 适配器
+- M2 规则半区 ✅(0.2.0);M3 数据访问半区 + Ed25519 签名审计链 ✅(0.4.0)
+- M4 ✅(0.5.0):评测框架(ASR + utility 双指标、阈值曲线、录制-重放对账)、OWASP 2026 覆盖矩阵、Vercel AI SDK / Mastra 适配器、文档站
+- 后续:ai-edge 迁移落地(指南见 `docs/migrations/ai-edge.md`)、更多攻击语料、NER 层 PII 适配器
 
 ## 工程承诺
 

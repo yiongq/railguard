@@ -79,11 +79,25 @@ Ported from mcp-foundry's guard pipeline (fail-closed, enumeration-oracle-safe, 
 | `MemoryApprovalStore` / `JsonlApprovalStore` (`/node`) | — | Event-sourced approval stores; crash-tail tolerant replay |
 | `SignedJsonlAuditSink` (`/node`) + `verifyAuditChain` (`/audit`) | — | Tamper-evident audit: Ed25519-signed hash chain, offline verification, crash-tail truncation, cross-restart continuation |
 
+## Evals & adapters (M4, `/eval` and `/adapters/*`)
+
+| API | What it does |
+|---|---|
+| `evaluate(guard, cases)` | ASR + utility dual-metric report (interception rate alone drifts toward blocking everything); byRule/byTag attribution |
+| `ioCases()` / `dataCases()` + `referenceIoGuard()` / `referenceDataGuard()` | Versioned dataset + reference guards — evaluate out of the box; CI pins the exact numbers |
+| `scoreCurve(guard, cases)` | Threshold curve for the probabilistic layer (observe-mode: hypothetical catch rate vs. false-flag rate) |
+| `recordingGuard` / `diffReplay` | Record real traffic → replay under a new config → list of changed verdicts; the observe → enforce reconciliation step as code |
+| `coverageMatrix(rules, cases)` | Rule `threats` metadata × the official OWASP 2026 catalogs (LLM Top 10 + Agentic/ASI Top 10); uncovered threats listed honestly |
+| `railguardMiddleware(guard)` + `guardTools(tools, guard)` | Vercel AI SDK v7 middleware + tool wrapping (`@yiong/railguard/adapters/vercel-ai`, zero-dep structural types) |
+| `railguardProcessor(guard)` | Mastra v1 Processor (`@yiong/railguard/adapters/mastra`); rules-layer, zero model calls — stack it before Mastra's LLM-based detectors |
+
+Honesty note baked into the dataset: it includes an off-table novel-phrasing attack the heuristic layer is *expected* to miss — a non-zero ASR is a documented fact, not a defect.
+
 ## Roadmap
 
-- M2 (partial ✅): spotlighting, taint + lethal-trifecta, numeric tracing, PII, freeze-block defang, streaming guard shipped in 0.2.0; ai-edge migration next
-- M3 ✅ (0.4.0): data-access half + Ed25519 signed audit chain (WebCrypto — signs and verifies on edge too)
-- M4: eval framework (trace replay, ASR + utility dual metrics), coverage matrix, Vercel AI SDK / Mastra adapters
+- M2 rules half ✅ (0.2.0); M3 data-access half + Ed25519 signed audit chain ✅ (0.4.0)
+- M4 ✅ (0.5.0): eval framework (ASR + utility dual metrics, threshold curves, record-replay reconciliation), OWASP 2026 coverage matrix, Vercel AI SDK / Mastra adapters, docs site
+- Next: land the ai-edge migration (guide in `docs/migrations/ai-edge.md`), grow the attack corpus, NER-tier PII adapter
 
 ## Engineering commitments
 

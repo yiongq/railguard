@@ -1,6 +1,6 @@
 {
   "name": "@yiong/railguard",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Lifecycle-hook guardrail pipeline for LLM apps and agents: data-access guards and LLM I/O guards in one zero-dependency TypeScript library. In-process, Node + edge, per-rule enforce/observe/off.",
   "license": "MIT",
   "type": "module",
@@ -33,6 +33,18 @@
       "types": "./dist/node/index.d.ts",
       "default": "./dist/node/index.js"
     },
+    "./eval": {
+      "types": "./dist/eval/index.d.ts",
+      "default": "./dist/eval/index.js"
+    },
+    "./adapters/vercel-ai": {
+      "types": "./dist/adapters/vercel-ai.d.ts",
+      "default": "./dist/adapters/vercel-ai.js"
+    },
+    "./adapters/mastra": {
+      "types": "./dist/adapters/mastra.d.ts",
+      "default": "./dist/adapters/mastra.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -41,7 +53,16 @@
     "test": "vitest run",
     "check:zero-deps": "node -e \"const p=require('./package.json');if(Object.keys(p.dependencies||{}).length){console.error('dependencies must stay empty');process.exit(1)}\"",
     "check:no-node-imports": "node scripts/check-runtime-purity.mjs",
-    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build"
+    "gen:coverage": "pnpm build && node scripts/gen-coverage.mjs",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "pnpm gen:coverage && vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "check:package": "publint && node scripts/check-package-shape.mjs",
+    "check": "pnpm check:zero-deps && pnpm check:no-node-imports && pnpm typecheck && pnpm test",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish",
+    "prepublishOnly": "pnpm check && pnpm build && pnpm check:package"
   },
   "keywords": [
     "llm",
@@ -60,10 +81,22 @@
     "type": "git",
     "url": "git+https://github.com/yiongq/railguard.git"
   },
+  "homepage": "https://yiongq.github.io/railguard/",
+  "bugs": {
+    "url": "https://github.com/yiongq/railguard/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@changesets/cli": "^3.0.1",
     "@types/node": "^22.10.0",
+    "publint": "^0.3.24",
     "tsdown": "0.15.7",
     "typescript": "^5.7.0",
+    "vitepress": "^1.6.4",
     "vitest": "^4.1.0"
   },
   "packageManager": "pnpm@10.30.2"

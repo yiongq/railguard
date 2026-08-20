@@ -172,3 +172,29 @@ describe('createStreamGuard 流式护栏', () => {
     expect(r.emit).toBe('AAAA**BBBB')
   })
 })
+
+describe('createStreamGuard 边界语义(审查回归钉)', () => {
+  const empty = () => createGuard({ hooks: {} })
+  it('英文句点+空白是边界;小数不许拦腰切', async () => {
+    const sg = createStreamGuard(empty(), empty().context())
+    const r1 = await sg.push('Price is 3.5 dollars. Next part')
+    expect(r1.emit).toBe('Price is 3.5 dollars.')
+    expect((await sg.flush()).emit).toBe(' Next part')
+  })
+  it('消耗型边界(如 /\\n/)的分隔符保留在段内,不从流里被吃掉', async () => {
+    const sg = createStreamGuard(empty(), empty().context(), { boundary: /\n/ })
+    const r = await sg.push('第一行\n第二行')
+    expect(r.emit).toBe('第一行\n')
+    expect((await sg.flush()).emit).toBe('第二行')
+  })
+  it('自定义边界带 m/y flag 不改变切分语义', async () => {
+    const sg = createStreamGuard(empty(), empty().context(), { boundary: /(?<=\n)/my })
+    const r = await sg.push('a\nb')
+    expect(r.emit).toBe('a\n')
+  })
+  it('缓冲恰好以边界收尾立刻送检,不等下一个 chunk', async () => {
+    const sg = createStreamGuard(empty(), empty().context())
+    const r = await sg.push('完整一句。')
+    expect(r.emit).toBe('完整一句。')
+  })
+})

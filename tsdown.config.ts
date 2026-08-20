@@ -1,7 +1,10 @@
 import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/rules/index.ts', 'src/audit/index.ts', 'src/data/index.ts', 'src/node/index.ts'],
+  entry: [
+    'src/index.ts', 'src/rules/index.ts', 'src/audit/index.ts', 'src/data/index.ts',
+    'src/node/index.ts', 'src/eval/index.ts', 'src/adapters/vercel-ai.ts', 'src/adapters/mastra.ts',
+  ],
   platform: 'neutral',
   // oxc-transform 0.x 与 rolldown-plugin-dts 0.16 返回形状失配(result.errors undefined),
   // 先走 tsc 生成 dts;上游修复后再切回 oxc 快路径

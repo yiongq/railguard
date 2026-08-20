@@ -62,7 +62,11 @@ export function applyRowRules(data: unknown, rules: readonly RowRule[], principa
       return actual !== undefined && String(actual) === String(expected)
     })
   }
-  if (Array.isArray(data)) return { denied: false, data: data.filter(matches) }
+  if (Array.isArray(data)) {
+    const kept = data.filter(matches)
+    // 一行未滤时返回原引用:verdict 语义要诚实,没改内容就不许报 modified
+    return { denied: false, data: kept.length === data.length ? data : kept }
+  }
   if (matches(data)) return { denied: false, data }
   return { denied: true, rule: rules.map((r) => `${r.field}==${r.equals}`).join(' && ') }
 }
@@ -79,7 +83,7 @@ export function rowFilter(options: DataGuardOptions): Rule<ToolResultPayload> {
     tier: 'deterministic',
     cost: 'zero',
     failMode: 'closed',
-    version: '1.0.0',
+    version: '1.1.0', // 1.1.0:未滤除任何行时改报 pass(原先数组一律报 modified)
     threats: { llm: ['LLM02:2026'] },
     check(input: ToolResultPayload, ctx): RuleOutcome<ToolResultPayload> {
       const role = roleOf(options.config, ctx.principal, system)
@@ -96,22 +100,24 @@ export function rowFilter(options: DataGuardOptions): Rule<ToolResultPayload> {
   }
 }
 
-/** 字段脱敏:按字段名递归抹除(含嵌套对象与数组) */
+/** 字段脱敏:按字段名递归抹除(含嵌套对象与数组)。数据里不含目标字段时返回原引用 */
 export function maskFields(data: unknown, fields: readonly string[]): unknown {
   if (fields.length === 0) return data
   const blocked = new Set(fields)
+  let removed = false
   const walk = (value: unknown): unknown => {
     if (Array.isArray(value)) return value.map(walk)
     if (typeof value === 'object' && value !== null) {
+      const entries = Object.entries(value as Record<string, unknown>)
+      if (entries.some(([key]) => blocked.has(key))) removed = true
       return Object.fromEntries(
-        Object.entries(value as Record<string, unknown>)
-          .filter(([key]) => !blocked.has(key))
-          .map(([key, v]) => [key, walk(v)]),
+        entries.filter(([key]) => !blocked.has(key)).map(([key, v]) => [key, walk(v)]),
       )
     }
     return value
   }
-  return walk(data)
+  const masked = walk(data)
+  return removed ? masked : data
 }
 
 /** 字段脱敏规则(afterToolCall):按角色 mask 列表抹除结果字段 */
@@ -123,15 +129,17 @@ export function fieldMask(options: DataGuardOptions): Rule<ToolResultPayload> {
     tier: 'deterministic',
     cost: 'zero',
     failMode: 'closed',
-    version: '1.0.0',
+    version: '1.1.0', // 1.1.0:数据里不含目标字段时改报 pass(原先配置了 mask 就一律报 modified)
     threats: { llm: ['LLM02:2026'] },
     check(input: ToolResultPayload, ctx): RuleOutcome<ToolResultPayload> {
       const role = roleOf(options.config, ctx.principal, system)
       const fields = role?.mask ?? []
       if (fields.length === 0) return { verdict: 'pass', status: 'ok' }
+      const data = maskFields(input.data, fields)
+      if (data === input.data) return { verdict: 'pass', status: 'ok' }
       return {
         verdict: 'modified', status: 'ok',
-        transformed: { ...input, data: maskFields(input.data, fields) },
+        transformed: { ...input, data },
         reason: `脱敏字段: ${fields.join(', ')}`,
       }
     },
