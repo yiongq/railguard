@@ -28,6 +28,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm docs:build # gen:coverage(构建 + 生成矩阵页)+ vitepress build
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true # 首次运行自动启用 Pages(GitHub Actions 源),免手动进 Settings
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/.vitepress/dist
