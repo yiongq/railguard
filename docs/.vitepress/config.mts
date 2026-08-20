@@ -56,7 +56,7 @@ export default defineConfig({
             ],
           },
           {
-            text: '评测(M4)',
+            text: '评测',
             items: [
               { text: '评测框架', link: '/guide/eval' },
               { text: 'OWASP 覆盖矩阵', link: '/coverage' },
@@ -111,7 +111,7 @@ export default defineConfig({
             ],
           },
           {
-            text: 'Evals (M4)',
+            text: 'Evals',
             items: [
               { text: 'Eval framework', link: '/en/guide/eval' },
               { text: 'OWASP coverage matrix', link: '/en/coverage' },
