@@ -10,9 +10,13 @@ Trusted Publisher 配在 npm 包的 Settings 页——**包不存在就没有这
 所以第一个版本必须本地手动发:
 
 ```sh
-npm login          # 如未登录
-npm publish        # publishConfig 已带 access: public;webauthn 确认
+npm login                        # 如未登录
+npm publish --provenance=false   # webauthn 确认;access: public 已在 publishConfig
 ```
+
+`--provenance=false` 是必须的:`publishConfig.provenance: true` 会让**本地**发布
+直接报错——provenance 只能在 CI 的 OIDC 环境里生成,首发这一次没有也不影响
+(toolkit 的 0.1.0 同样无 provenance),之后 CI 发的每个版本都会带。
 
 `prepublishOnly` 会自动跑全部质量门:零依赖断言 + 运行时纯度 + typecheck + test
 + build + publint/attw。
