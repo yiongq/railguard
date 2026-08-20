@@ -69,10 +69,6 @@ export default defineConfig({
               { text: 'Mastra', link: '/guide/adapter-mastra' },
             ],
           },
-          {
-            text: '迁移',
-            items: [{ text: 'ai-edge → railguard', link: '/migrations/ai-edge' }],
-          },
         ],
         outline: { label: '本页导航', level: [2, 3] },
         docFooter: { prev: '上一页', next: '下一页' },

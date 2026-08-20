@@ -101,7 +101,7 @@ const output = await guard.run('onOutput', answerPayload, ctx)
 
 - M2 规则半区 ✅(0.2.0);M3 数据访问半区 + Ed25519 签名审计链 ✅(0.4.0)
 - M4 ✅(0.5.0):评测框架(ASR + utility 双指标、阈值曲线、录制-重放对账)、OWASP 2026 覆盖矩阵、Vercel AI SDK / Mastra 适配器、文档站
-- 后续:ai-edge 迁移落地(指南见 `docs/migrations/ai-edge.md`)、更多攻击语料、NER 层 PII 适配器
+- 后续:首个下游项目迁移落地、更多攻击语料、NER 层 PII 适配器
 
 ## 工程承诺
 

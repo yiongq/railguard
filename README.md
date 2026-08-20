@@ -97,7 +97,7 @@ Honesty note baked into the dataset: it includes an off-table novel-phrasing att
 
 - M2 rules half ✅ (0.2.0); M3 data-access half + Ed25519 signed audit chain ✅ (0.4.0)
 - M4 ✅ (0.5.0): eval framework (ASR + utility dual metrics, threshold curves, record-replay reconciliation), OWASP 2026 coverage matrix, Vercel AI SDK / Mastra adapters, docs site
-- Next: land the ai-edge migration (guide in `docs/migrations/ai-edge.md`), grow the attack corpus, NER-tier PII adapter
+- Next: land the first downstream migration, grow the attack corpus, NER-tier PII adapter
 
 ## Engineering commitments
 
