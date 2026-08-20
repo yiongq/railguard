@@ -55,11 +55,11 @@ describe('linkPolicy', () => {
   const rule = linkPolicy({ allow: ['https://github.com/yiongq/'] })
   it('白名单内保留,名单外移除', async () => {
     const out = await rule.check(
-      '见 https://github.com/yiongq/medforge 和 https://evil.example.com/x',
+      '见 https://github.com/yiongq/railguard 和 https://evil.example.com/x',
       ctx(),
     )
     expect(out.verdict).toBe('modified')
-    expect(out.transformed).toContain('github.com/yiongq/medforge')
+    expect(out.transformed).toContain('github.com/yiongq/railguard')
     expect(out.transformed).not.toContain('evil.example.com')
     expect(out.transformed).toContain('[链接已移除]')
   })

@@ -2,7 +2,7 @@
 
 经 **Changesets** + **npm Trusted Publishing(OIDC,无 token)** 发布,附 **provenance 签发**。
 流水线在 [`.github/workflows/release.yml`](.github/workflows/release.yml),
-路径与 `@yiong/mcp-chinese-rag-toolkit` 同款(它的坑这里都已避开)。
+是同作者其它公开包上验证过的同款路径,已知的坑都已避开。
 
 ## 0. 首发引导(一次性,人工)
 
@@ -15,8 +15,8 @@ npm publish --provenance=false   # webauthn 确认;access: public 已在 publish
 ```
 
 `--provenance=false` 是必须的:`publishConfig.provenance: true` 会让**本地**发布
-直接报错——provenance 只能在 CI 的 OIDC 环境里生成,首发这一次没有也不影响
-(toolkit 的 0.1.0 同样无 provenance),之后 CI 发的每个版本都会带。
+直接报错——provenance 只能在 CI 的 OIDC 环境里生成。首发这一次没有不影响,
+之后 CI 发的每个版本都会带。
 
 `prepublishOnly` 会自动跑全部质量门:零依赖断言 + 运行时纯度 + typecheck + test
 + build + publint/attw。

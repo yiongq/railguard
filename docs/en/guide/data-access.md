@@ -1,6 +1,6 @@
 # Data-Access Half
 
-Migrated from the mcp-foundry guard pipeline; lives in `@yiong/railguard/data`. Three disciplines run through everything:
+Lives in `@yiong/railguard/data`, distilled from a production guard pipeline. Three disciplines run through everything:
 **fail-closed** (missing identity/role/rule → reject, always), **no existence-enumeration oracle**
 ("not found" and "no access" reject in identical shape), and **no replay** (approvals: one ticket, one use).
 

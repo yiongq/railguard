@@ -1,7 +1,7 @@
 name: Release
 
 # 经 Changesets + npm Trusted Publishing(OIDC,无 token)发布 @yiong/railguard,
-# 附 provenance 签发。流程(同 mcp-chinese-rag-toolkit 的成熟路径):
+# 附 provenance 签发。流程:
 # main 上存在 changeset 文件时,changesets/action 开/更新「Version Packages」PR;
 # 该 PR 合并(changesets 被消费)后,本工作流再次运行并执行 `pnpm run release`
 # (= changeset publish)完成发布。

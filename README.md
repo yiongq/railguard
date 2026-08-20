@@ -67,7 +67,7 @@ Streaming: `createStreamGuard(guard, ctx)` batches chunks at sentence boundaries
 
 ## Data-access guards (`/data`)
 
-Ported from mcp-foundry's guard pipeline (fail-closed, enumeration-oracle-safe, replay-proof):
+Distilled from a production guard pipeline (fail-closed, enumeration-oracle-safe, replay-proof):
 
 | API | Hook | What it does |
 |---|---|---|

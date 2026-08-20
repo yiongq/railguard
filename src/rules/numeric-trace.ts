@@ -1,7 +1,7 @@
 import type { Rule, RuleOutcome } from '../core/types'
 
 /**
- * 事实分信任级(wecom price-guard 的教训沉淀):
+ * 事实分信任级(生产报价护栏的教训沉淀):
  * authoritative=工具/系统产出;derived=规则推导;userStated=用户自述——
  * 承诺语境下用户自述不作数,防「客户喊 6800 你答应就过护栏」。
  */

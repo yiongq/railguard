@@ -1,4 +1,4 @@
-/** RBAC 配置模型(自 mcp-foundry core 迁入;解绑 zod/yaml——宿主传对象,
+/** RBAC 配置模型(零依赖形态:解绑 zod/yaml——宿主传对象,
  *  validateRbacConfig 做零依赖结构校验;YAML 解析留给宿主)。 */
 import type { Identity } from '../core/types'
 

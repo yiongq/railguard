@@ -71,7 +71,7 @@ const output = await guard.run('onOutput', answerPayload, ctx)
 
 ## 数据访问守卫(`/data`)
 
-自 mcp-foundry 守卫管线迁入(fail-closed、防存在性枚举预言机、防重放):
+自生产守卫管线沉淀(fail-closed、防存在性枚举预言机、防重放):
 
 | API | 钩子 | 说明 |
 |---|---|---|

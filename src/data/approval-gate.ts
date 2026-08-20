@@ -1,5 +1,5 @@
 /** 审批闸门规则(beforeToolCall):幂等开单 → 挂起升级 → 批复后重试消票放行。
- *  语义自 mcp-foundry Guard 迁入:一票一次防重放;涉审但未接存储 = fail-closed。 */
+ *  语义不变量:一票一次防重放;涉审但未接存储 = fail-closed。 */
 import { hashArgs } from '../core/hash'
 import type { Rule, RuleOutcome } from '../core/types'
 import type { ApprovalStore } from './approvals'

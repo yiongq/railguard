@@ -1,6 +1,6 @@
 /**
- * 防篡改审计:审计事件升级为「Ed25519 签名的哈希链」(自 mcp-foundry 迁入,
- * node:crypto → WebCrypto,Node/edge/浏览器通用)。
+ * 防篡改审计:审计事件升级为「Ed25519 签名的哈希链」
+ * (WebCrypto 实现,Node/edge/浏览器通用)。
  *
  * 每条记录带 seq(单调)、prevHash(前条 hash)、hash(本条规范化内容 SHA-256)、
  * sig(对 hash 的 Ed25519 签名)。两层保护:

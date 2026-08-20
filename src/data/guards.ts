@@ -1,4 +1,4 @@
-/** 数据访问守卫规则:工具白名单 / 行级过滤 / 字段脱敏(自 mcp-foundry Guard 管线拆解)。 */
+/** 数据访问守卫规则:工具白名单 / 行级过滤 / 字段脱敏(生产守卫管线的沉淀)。 */
 import type { Identity, Rule, RuleOutcome } from '../core/types'
 import { resolveSelfRef, roleOf, type RbacConfig, type RowRule } from './rbac'
 
